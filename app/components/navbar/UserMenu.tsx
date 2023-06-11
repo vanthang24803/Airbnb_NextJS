@@ -3,14 +3,20 @@
 import { BiGlobe } from "react-icons/bi";
 import { AiOutlineMenu } from "react-icons/ai";
 import Avatar from "../Avatar";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
+import { SafeUser } from "@/app/types";
+import { signOut } from "next-auth/react";
 
-const UserMenu = () => {
-  const  registerModal = useRegisterModal();
-   const loginModal = useLoginModal();
+interface UserMenuProps {
+  currentUser?: SafeUser | null;
+}
+
+const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
+  const registerModal = useRegisterModal();
+  const loginModal = useLoginModal();
   const [isOpen, setIsOpen] = useState(false);
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
@@ -58,16 +64,29 @@ const UserMenu = () => {
             text-sm"
         >
           <div className="flex flex-col cursor-pointer">
-            <>
-              <div className="mb-2 ">
+            {currentUser ? (
+              <>
+                <MenuItem onClick={() => {}} label="Messages" />
+                <MenuItem onClick={() => {}} label="Trips" />
+                <MenuItem onClick={() => {}} label="Wishlists" />
+                <MenuItem onClick={() => {}} label="Reservations" />
+                <MenuItem onClick={() => {}} label="Properties" />
+                <hr />
+                <MenuItem onClick={() => {}} label="Airbnb your home" />
+                <MenuItem onClick={() => {}} label="Account" />
+                <hr />
+                <MenuItem onClick={() => {}} label="Help" />
+                <MenuItem onClick={() => signOut()} label="Log out" />
+              </>
+            ) : (
+              <>
                 <MenuItem onClick={loginModal.onOpen} label="Login" />
                 <MenuItem onClick={registerModal.onOpen} label="Sign up" />
-              </div>
-              <div className="border-t-[1px] border-neutral-200 mt-2">
-                <MenuItem onClick={() => {}} label="Airbnb your home"  />
+                <hr />
+                <MenuItem onClick={() => {}} label="Airbnb your home" />
                 <MenuItem onClick={() => {}} label="Help" />
-              </div>
-            </>
+              </>
+            )}
           </div>
         </div>
       )}
