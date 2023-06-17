@@ -51,7 +51,8 @@ const LoginModal = () => {
       if (callback?.error) {
         toast.error(callback.error);
       }
-    });
+    })
+    .finally(() => setIsLoading(false));
   };
 
   const onToggle = useCallback(() => {
